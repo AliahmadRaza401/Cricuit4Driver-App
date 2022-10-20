@@ -5,6 +5,7 @@ import 'package:circuit4driver/models/location_model.dart';
 import 'package:circuit4driver/modules/Home/drawer.dart';
 import 'package:circuit4driver/utils/constFile.dart';
 import 'package:circuit4driver/utils/customToast.dart';
+import 'package:circuit4driver/utils/dynamic_size.dart';
 import 'package:custom_info_window/custom_info_window.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -270,6 +271,7 @@ class _HomeState extends State<Home> {
                                             // height: 200,
                                             width: size.width * 0.9,
                                             decoration: BoxDecoration(
+                                              // color: Colors.amber,
                                               // color: Colors.grey
                                               //     .withOpacity(0.3),
                                               borderRadius:
@@ -386,17 +388,29 @@ class _HomeState extends State<Home> {
                                                         ],
                                                       ),
                                                     ),
+                                                    Container(
+                                                      width: dynamicWidth(
+                                                          context, 0.85),
+                                                      child: Row(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .end,
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .end,
+                                                        children: [
+                                                          Text(singleIndex
+                                                                  .distance
+                                                                  .toString() +
+                                                              " km " +
+                                                              singleIndex
+                                                                  .timeofLocationSet
+                                                                  .toString() +
+                                                              " Min"),
+                                                        ],
+                                                      ),
+                                                    ),
                                                   ],
-                                                ),
-                                                const SizedBox(
-                                                  width: 5,
-                                                ),
-                                                Text("Default Time " +
-                                                    singleIndex
-                                                        .timeofLocationSet
-                                                        .toString()),
-                                                const SizedBox(
-                                                  width: 5,
                                                 ),
                                               ],
                                             )),

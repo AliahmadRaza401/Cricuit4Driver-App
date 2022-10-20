@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:circuit4driver/models/location_model.dart';
 import 'package:circuit4driver/utils/constFile.dart';
+import 'package:circuit4driver/utils/distance_calculator.dart';
 import 'package:circuit4driver/utils/map_service.dart';
 import 'package:custom_info_window/custom_info_window.dart';
 import 'package:flutter/material.dart';
@@ -70,7 +71,7 @@ class HomeProvider with ChangeNotifier {
   String locationPlaceinVehicleSecond;
   String locationPlaceinVehicleThird;
 
-  setSingleValue(locationresult) {
+  setSingleValue(locationresult) async {
     renternCurrentLoaction = locationresult;
     renternCurrentLoactionAddres = renternCurrentLoaction.formattedAddress;
     oneAddressLat = renternCurrentLoaction.geometry.location.lat;
@@ -80,21 +81,30 @@ class HomeProvider with ChangeNotifier {
     log('parkingAddressLat = $oneAddressLat');
     log('renteraddress = ${renternCurrentLoaction.formattedAddress}');
 
+    var distance = await calculateDistanceInKM(
+        LatLng(locationList[locationList.length - 1].locationLat,
+            locationList[locationList.length - 1].locationLong),
+        LatLng(oneAddressLat, oneAddressLong));
+
+    var rideTime = await calculateETAInMinutes(distance, 30);
+    debugPrint('distance_________________________: ${distance}');
     locationList.add(
       LocationModel(
-          locationAddress: renternCurrentLoactionAddres,
-          locationLat: oneAddressLat,
-          locationLong: oneAddressLong,
-          locationDescription: '',
-          locationperiority: 'Normal',
-          locationPlaceinVehicleFirst: 'Front',
-          locationPlaceinVehicleSecond: 'Left',
-          locationPlaceinVehicleThird: 'Floor',
-          locationArrivedbetweenStart: 'Now',
-          locationArrivedbetweenEnd: 'Anytime',
-          locationTimeAtStop: 1,
-          locationTypeofRide: 'Delivery',
-          timeofLocationSet: 2),
+        locationAddress: renternCurrentLoactionAddres,
+        locationLat: oneAddressLat,
+        locationLong: oneAddressLong,
+        locationDescription: '',
+        locationperiority: 'Normal',
+        locationPlaceinVehicleFirst: 'Front',
+        locationPlaceinVehicleSecond: 'Left',
+        locationPlaceinVehicleThird: 'Floor',
+        locationArrivedbetweenStart: 'Now',
+        locationArrivedbetweenEnd: 'Anytime',
+        locationTimeAtStop: 1,
+        locationTypeofRide: 'Delivery',
+        timeofLocationSet: rideTime.toStringAsFixed(1),
+        distance: distance == null ? "0.0" : distance.toStringAsFixed(1),
+      ),
     );
 
     log('locationList length = ${locationList.length}');
@@ -138,19 +148,21 @@ class HomeProvider with ChangeNotifier {
       print('add current location also in list');
       await locationList.add(
         LocationModel(
-            locationAddress: "Current Address",
-            locationLat: currentLaltg.latitude,
-            locationLong: currentLaltg.longitude,
-            locationDescription: '',
-            locationperiority: 'Normal',
-            locationPlaceinVehicleFirst: 'Front',
-            locationPlaceinVehicleSecond: 'Left',
-            locationPlaceinVehicleThird: 'Floor',
-            locationArrivedbetweenStart: 'Now',
-            locationArrivedbetweenEnd: 'Anytime',
-            locationTimeAtStop: 1,
-            locationTypeofRide: 'Delivery',
-            timeofLocationSet: 2),
+          locationAddress: "Current Address",
+          locationLat: currentLaltg.latitude,
+          locationLong: currentLaltg.longitude,
+          locationDescription: '',
+          locationperiority: 'Normal',
+          locationPlaceinVehicleFirst: 'Front',
+          locationPlaceinVehicleSecond: 'Left',
+          locationPlaceinVehicleThird: 'Floor',
+          locationArrivedbetweenStart: 'Now',
+          locationArrivedbetweenEnd: 'Anytime',
+          locationTimeAtStop: 1,
+          locationTypeofRide: 'Delivery',
+          timeofLocationSet: "0",
+          distance: "0.0",
+        ),
       );
       notifyListeners();
     }
