@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:circuit4driver/constant.dart';
 import 'package:circuit4driver/modules/Home/impostazioni.dart';
+import 'package:circuit4driver/modules/Home/subscribtion.dart';
 import 'package:circuit4driver/modules/provider/home_providers.dart';
 import 'package:circuit4driver/utils/constFile.dart';
 import 'package:flutter/cupertino.dart';
@@ -210,6 +211,10 @@ Widget drawer(context) {
               ListTile(
                 leading: Icon(Icons.ac_unit),
                 title: Text("Nuovo percorse"),
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: ((context) => Subscribtion())));
+                },
               ),
               ListTile(
                 leading: Icon(Icons.info),
